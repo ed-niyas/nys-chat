@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import * as socketIo from 'socket.io-client';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from '../classes/user';
@@ -9,7 +9,7 @@ import { CommonService } from '../common/common.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, AfterViewChecked  {
 
   private socket;
   private user= new User('','','');
@@ -26,7 +26,7 @@ export class ChatComponent implements OnInit {
     this.socket= socketIo('http://localhost:3000');
 
     this.socket.on('chat', (data)=>{
-      if(data.sender==this.user.handle || data.receiver== this.user.handle){
+      if( (data.sender==this.user.handle || data.receiver== this.user.handle) && (this.receiver_handle==data.sender || this.receiver_handle== data.receiver)) {
         this.chats.push(data);
       }
     });
@@ -45,6 +45,7 @@ export class ChatComponent implements OnInit {
       }
       if(this.handlers.length>0){
         this.receiver_handle= this.handlers[0].handle;
+        this.getStoredChats();
       }
     });
   }
@@ -59,6 +60,28 @@ export class ChatComponent implements OnInit {
     }
   }
 
+
+  getStoredChats(){
+    if(this.receiver_handle!==undefined && this.receiver_handle!=='' && this.receiver_handle!==null){
+      this.objCommonService.getChats(this.user.handle, this.receiver_handle).subscribe(res=>{
+        let chat_string="["+res['_body']+"]";
+        chat_string = chat_string.replace(/,([^,]*)$/,'$1');
+        try{
+          this.chats= JSON.parse(chat_string);
+         
+        }
+        catch(err){
+          console.log('error in restoring chat.');
+          this.chats=[];
+        }
+      });
+    }
+    else{
+      this.chats=[];
+    }
+   
+  }
+
   sendMessage():void{
     if(this.message!=='' && this.receiver_handle!==''){
       this.socket.emit('chat',{
@@ -70,4 +93,12 @@ export class ChatComponent implements OnInit {
     this.message='';
   }
 
+  receiverChanged(){
+    this.getStoredChats();
+  }
+
+  ngAfterViewChecked(){
+      var element = document.getElementById("chat-window");
+      element.scrollTop = 9999999;
+  }
 }

@@ -12,6 +12,7 @@ import {RouteConfig} from './app.routing';
 import { CommonService } from './common/common.service';
 import { SampleGuard } from './authentication/sample.guard';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    HttpModule,
     BrowserAnimationsModule,
     MaterialModule,
     RouterModule.forRoot(RouteConfig, { useHash: false })

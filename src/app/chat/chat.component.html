@@ -10,7 +10,7 @@
   <div style="margin: 10px;">
     <mat-form-field style="width: 100%;">
       <mat-select color="blue" placeholder="Choose a person to chat" [(value)]='receiver_handle'>
-        <mat-option *ngFor="let item of handlers" [value]="item.handle">
+        <mat-option *ngFor="let item of handlers" [value]="item.handle" (click)="receiverChanged()">
           {{ item.displayName}} - {{ item.handle }}
         </mat-option>
       </mat-select>
@@ -35,8 +35,5 @@
       <textarea matInput placeholder="Message" [(ngModel)]='this.message'></textarea>
       <mat-icon matSuffix (click)='sendMessage()'>send</mat-icon>
     </mat-form-field>
-
-    <!-- <input id='message' type='text' [(ngModel)]='this.message' placeholder="Type message here" /> -->
-    <!-- <button (click)='sendMessage()'>Send</button> -->
   </div>
 </div>

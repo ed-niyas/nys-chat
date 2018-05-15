@@ -6,7 +6,7 @@ import { SampleGuard } from './authentication/sample.guard';
 
 
 export const RouteConfig: Routes = [
-      { path:'',  redirectTo: '/register', pathMatch: 'full'},
+      { path:'',  redirectTo: '/login', pathMatch: 'full'},
       { path:'register', component: RegisterComponent},
       { path:'login', component: LoginComponent},
       { path: 'chat/:handle', component: ChatComponent, canActivate:[SampleGuard]},
