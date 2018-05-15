@@ -1,0 +1,42 @@
+<div id='nys-chat'>
+  <div id="header-box">
+    <span>
+      <i>Welcome {{this.user.displayName}}</i>
+    </span>
+    <span style="float: right">
+      <a [routerLink]="['/login']" style="color: white;text-decoration: none"><i>Logout</i></a>
+    </span>
+  </div>
+  <div style="margin: 10px;">
+    <mat-form-field style="width: 100%;">
+      <mat-select color="blue" placeholder="Choose a person to chat" [(value)]='receiver_handle'>
+        <mat-option *ngFor="let item of handlers" [value]="item.handle">
+          {{ item.displayName}} - {{ item.handle }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div id='chat-window'>
+    <div id='output'>
+      <div *ngFor="let chat of this.chats;">
+        <div id='chat-box-sender' *ngIf='this.user.handle===chat.sender'>
+          <strong>{{chat.sender}}</strong>
+          <br /> {{chat.message}}
+        </div>
+        <div id='chat-box-receiver' *ngIf='this.user.handle!==chat.sender'>
+          <strong>{{chat.sender}}</strong>
+          <br /> {{chat.message}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin: 10px;">
+    <mat-form-field style="width: 100%">
+      <textarea matInput placeholder="Message" [(ngModel)]='this.message'></textarea>
+      <mat-icon matSuffix (click)='sendMessage()'>send</mat-icon>
+    </mat-form-field>
+
+    <!-- <input id='message' type='text' [(ngModel)]='this.message' placeholder="Type message here" /> -->
+    <!-- <button (click)='sendMessage()'>Send</button> -->
+  </div>
+</div>

@@ -1,0 +1,8 @@
+/* @import '~@angular/material/prebuilt-themes/deeppurple-amber.css'; */
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
+
+#box{
+    max-width: 400px;
+    margin: 30px auto;
+}

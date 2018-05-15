@@ -1,0 +1,45 @@
+ 
+<div class="container">
+    <div style="margin-top: 20%">
+        <div id="box">
+            <div class="panel panel-info" style="margin-bottom: 0px">
+                <div class="panel-heading">Welcome</div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field style="width: 100%">
+                                <input matInput [(ngModel)]="user.displayName" placeholder="Display Name">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field style="width: 100%">
+                                <input matInput [(ngModel)]="user.handle" placeholder="Handle">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field style="width: 100%">
+                                <input matInput [(ngModel)]="user.password" placeholder="Password" type="password">
+                                <mat-hint *ngIf="errorMsg!=''" style="color: red">{{errorMsg}}</mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button style="width: 100%" mat-raised-button mat-button  color="accent" (click)="register()">Register</button>
+                        </div>
+                    </div>
+                    <br />
+                    Have an account? <a [routerLink]="['/login']">Login</a> here
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
