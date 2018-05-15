@@ -3,7 +3,7 @@ Real time chat app with Angular, Node and MongoDb using socket-io
 ## Quick Start
 ### Installation and usage
 
-``` $ npm install```
+``` $ npm install``` <br />
 ``` $ npm start```
 
 ### Configuration
