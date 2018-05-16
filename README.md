@@ -28,3 +28,14 @@ config.MongoDb="mongodb://localhost/mydb";
 
 module.exports = config;
 ```
+
+#### environment
+
+    Change serverIp to the IP of your server. Systems which are in same network can access the app through browser.
+
+```javascript
+export const environment = {
+  production: false,
+  serverIp: '172.16.30.16'
+};
+```

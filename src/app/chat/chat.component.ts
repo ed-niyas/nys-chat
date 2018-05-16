@@ -3,102 +3,186 @@ import * as socketIo from 'socket.io-client';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from '../classes/user';
 import { CommonService } from '../common/common.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewChecked  {
+/**
+ * Chat component.
+ */
+export class ChatComponent implements OnInit, AfterViewChecked {
 
-  private socket;
-  private user= new User('','','');
-  private receiver_handle='';
-  private message='';
-  private chats=[];
-  private handlers: any;
+  socket;
+  user = new User('', '', '');
+  receiver_handle = '';
+  message = '';
+  chats = [];
+  handlers: any;
+  feedbackmsg = '';
+  feedbackmsg2 = '';
 
-  constructor(private router: Router,private activatedRoute: ActivatedRoute, private objCommonService: CommonService){
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private objCommonService: CommonService) {
 
   }
 
-  ngOnInit(): void{
-    this.socket= socketIo('http://localhost:3000');
+  ngOnInit(): void {
 
-    this.socket.on('chat', (data)=>{
-      if( (data.sender==this.user.handle || data.receiver== this.user.handle) && (this.receiver_handle==data.sender || this.receiver_handle== data.receiver)) {
+    this.socket = socketIo('http://' + environment.serverIp + ':3000');
+
+    //get messages.
+    this.socket.on('chat', (data) => {
+      if ((data.sender == this.user.handle || data.receiver == this.user.handle) && (this.receiver_handle == data.sender || this.receiver_handle == data.receiver)) {
         this.chats.push(data);
+        this.feedbackmsg = '';
+      }
+      else if (data.receiver == this.user.handle && this.receiver_handle !== data.sender) {
+        this.feedbackmsg2 = 'Received a message from ' + data.sender;
+        setTimeout(() => {
+          this.feedbackmsg2 = '';
+        }, 1000);
+      }
+      else {
+        this.feedbackmsg2 = '';
+      }
+    });
+
+    //typing in feedback
+    this.socket.on('typing', (data) => {
+      if (data.sender !== this.user.handle && data.receiver == this.user.handle) {
+        if (data.sender == this.receiver_handle) {
+          this.feedbackmsg = data.sender + ' is typing..';
+        }
+        else {
+          this.feedbackmsg2 = data.sender + ' is typing..';
+        }
+      }
+
+    });
+
+    //chat deletion call back event.
+    this.socket.on('chatDeleted', (data) => {
+      if (data.sender == this.user.handle && data.receiver == this.receiver_handle) {
+        this.chats = [];
       }
     });
 
     this.activatedRoute.params.subscribe((params: Params) => {
-      this.user.handle=params.handle;
+      this.user.handle = params.handle;
       this.RouteChanged();
     });
 
-    this.objCommonService.getHandlers().subscribe(res=>{
-      this.handlers= res;
-      let temp_handle= this.user.handle;
-      if(this.handlers.length>0){
-        let index = this.handlers.findIndex(function(element){ return element.handle==temp_handle});
-        this.handlers.splice(index,1);
+    //getting chat list.
+    this.objCommonService.getHandlers().subscribe(res => {
+      this.handlers = res;
+      let temp_handle = this.user.handle;
+      if (this.handlers.length > 0) {
+        let index = this.handlers.findIndex(function (element) { return element.handle == temp_handle });
+        this.handlers.splice(index, 1);
       }
-      if(this.handlers.length>0){
-        this.receiver_handle= this.handlers[0].handle;
+      if (this.handlers.length > 0) {
+        this.receiver_handle = this.handlers[0].handle;
         this.getStoredChats();
       }
     });
   }
 
-  RouteChanged(){
-    if(localStorage.getItem('handle')!==this.user.handle){
+  /**
+   * checking logged in user
+   */
+  RouteChanged() {
+    if (localStorage.getItem('handle') !== this.user.handle) {
       localStorage.clear();
       this.router.navigateByUrl('/login');
     }
-    else{
-      this.user.displayName= localStorage.getItem('displayName')!=undefined? localStorage.getItem('displayName'): this.user.handle;
+    else {
+      this.user.displayName = localStorage.getItem('displayName') != undefined ? localStorage.getItem('displayName') : this.user.handle;
     }
   }
 
+  /**
+   * Gets stored chats
+   */
+  getStoredChats() {
+    if (this.receiver_handle !== undefined && this.receiver_handle !== '' && this.receiver_handle !== null) {
+      this.objCommonService.getChats(this.user.handle, this.receiver_handle).subscribe(res => {
+        let chat_string = "[" + res['_body'] + "]";
+        chat_string = chat_string.replace(/,([^,]*)$/, '$1');
+        try {
+          this.chats = JSON.parse(chat_string);
 
-  getStoredChats(){
-    if(this.receiver_handle!==undefined && this.receiver_handle!=='' && this.receiver_handle!==null){
-      this.objCommonService.getChats(this.user.handle, this.receiver_handle).subscribe(res=>{
-        let chat_string="["+res['_body']+"]";
-        chat_string = chat_string.replace(/,([^,]*)$/,'$1');
-        try{
-          this.chats= JSON.parse(chat_string);
-         
         }
-        catch(err){
-          console.log('error in restoring chat.');
-          this.chats=[];
+        catch (err) {
+          this.chats = [];
         }
       });
     }
-    else{
-      this.chats=[];
+    else {
+      this.chats = [];
     }
-   
+
   }
 
-  sendMessage():void{
-    if(this.message!=='' && this.receiver_handle!==''){
-      this.socket.emit('chat',{
+  /**
+   * Sending message to socket io
+   */
+  sendMessage(): void {
+    if (this.message !== '' && this.receiver_handle !== '') {
+      this.socket.emit('chat', {
         message: this.message,
         sender: this.user.handle,
-        receiver:this.receiver_handle
+        receiver: this.receiver_handle
       });
     }
-    this.message='';
+    this.message = '';
   }
 
-  receiverChanged(){
+  /**
+   * Drop down change event fired
+   */
+  receiverChanged() {
+    this.feedbackmsg = '';
+    this.feedbackmsg2 = '';
     this.getStoredChats();
   }
 
-  ngAfterViewChecked(){
-      var element = document.getElementById("chat-window");
-      element.scrollTop = 9999999;
+  /**
+   * Scroll to bottom
+   */
+  ngAfterViewChecked() {
+    var element = document.getElementById("chat-window");
+    element.scrollTop = 9999999;
   }
+
+  /**
+   * Keyboard typing fired
+   * @param even
+   */
+  keyDownFunction(event) {
+    if (event.keyCode == 13) {
+      this.sendMessage();
+    }
+    else {
+      this.socket.emit('typing', { sender: this.user.handle, receiver: this.receiver_handle });
+    }
+  }
+
+  /**
+   * user logout
+   */
+  logout() {
+    this.router.navigateByUrl('/login');
+  }
+
+  /**
+   * deletes chats in server
+   */
+  clearChat() {
+    if (this.receiver_handle !== '') {
+      this.socket.emit('deletechat', { sender: this.user.handle, receiver: this.receiver_handle });
+    }
+  }
+
 }

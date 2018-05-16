@@ -1,10 +1,10 @@
 #header-box{
     background: darkblue;
-    padding: 10px;
+    padding: 5px;
     color: white;
 }
 #nys-chat{
-    max-width: 600px;
+    max-width: 500px;
     margin: 30px auto;
     border: 1px solid #ddd;
     box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
@@ -15,6 +15,14 @@
     height: 400px;
     overflow: auto;
     background: #f9f9f9;
+}
+
+#feeback-box{
+    font-size: 10px;
+    background: #f9f9f9;
+    font-style: italic;
+    padding-left: 5px;
+    font-size: 12px;
 }
 
 #chat-box-sender{
@@ -37,41 +45,11 @@
     background: rgba(171, 214, 242, 0);
 }
 
-#output p{
-    padding: 14px 0px;
-    margin: 0 20px;
-    border-bottom: 1px solid #e9e9e9;
-    color: #555;
-}
-
 #output strong{
     color: #575ed8;
+    font-size: 10px;
 }
 
-label{
-    box-sizing: border-box;
-    display: block;
-    padding: 10px 20px;
+.cursor{
+    cursor:pointer
 }
-
-input{
-    padding: 10px 20px;
-    box-sizing: border-box;
-    background: #eee;
-    border: 0;
-    display: block;
-    width: 100%;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-    font-family: Nunito;
-    font-size: 16px;
-}
-
-button{
-    background: black;
-    color: #fff !important;
-    font-weight: 400 !important;
-    font-size: 15px !important;
-    padding: 12px 0;
-    width: 100%;
-} 
