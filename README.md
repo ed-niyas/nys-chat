@@ -23,7 +23,7 @@ var config = {};
 <!-- cloud mongo end  -->
 
 <!-- local mongo start  -->
-config.MongoDb="mongodb://localhost/mydb";
+config.MongoDb="mongodb://localhost/nyschat";
 <!-- local mongo end  -->
 
 module.exports = config;
@@ -31,7 +31,7 @@ module.exports = config;
 
 #### environment
 
-    Change serverIp to the IP of your server. Systems which are in same network can access the app through browser.
+ Change serverIp to the IP of your server. Systems which are in same network can access the app through browser.
 
 ```javascript
 export const environment = {
