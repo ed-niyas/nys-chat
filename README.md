@@ -50,5 +50,5 @@ export const environment = {
  <li>Copy all the contents in dist/nys-chat/ to www folder of nys-chat-mobile</li>
  <li>Change <strong> base href="/" </strong> index.html in www to <strong> base href="./" </strong></li>
  <li><i>node server</i></li>
- <li>Go to nys-chat-mobile and do <i>cordova run ios<i> or cordova run ios</li>
+ <li>Go to nys-chat-mobile and do <i>cordova run ios<i> or cordova run android</li>
  </ul>
