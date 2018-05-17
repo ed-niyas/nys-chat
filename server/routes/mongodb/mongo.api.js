@@ -4,7 +4,7 @@ var ApiFunctions = require('./mongo.api.functions');
 
 // middleware that is specific to this router
 router.use(function Log (req, res, next) {
-    console.log('Mongo Api called ('+req.method+') : '+ req.originalUrl);
+    // console.log('Mongo Api called ('+req.method+') : '+ req.originalUrl);
     next()
 });
 

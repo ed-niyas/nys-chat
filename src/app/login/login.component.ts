@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
         if (result['displayName'] != undefined && result['displayName'] != null && result['displayName'] != '') {
           localStorage.setItem('displayName', result['displayName']);
           localStorage.setItem('handle', result['handle']);
-          this.router.navigateByUrl('/chat/' + this.user.handle);
+          this.router.navigateByUrl('/chat');
         }
       }
       else {

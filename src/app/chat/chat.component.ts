@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import * as socketIo from 'socket.io-client';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { User } from '../classes/user';
 import { CommonService } from '../common/common.service';
 import { environment } from '../../environments/environment';
@@ -23,20 +23,29 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   handlers: any;
   feedbackmsg = '';
   feedbackmsg2 = '';
+  online_users = [];
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private objCommonService: CommonService) {
-
-  }
+  constructor(private router: Router, private objCommonService: CommonService) { }
 
   ngOnInit(): void {
 
-    this.socket = socketIo('http://' + environment.serverIp + ':3000');
+    this.user.handle = localStorage.getItem('handle');
+    this.user.displayName = localStorage.getItem('displayName') != undefined ? localStorage.getItem('displayName') : localStorage.getItem('handle');
 
+    this.socket = socketIo('http://' + environment.serverIp + ':3000');
+    this.socket.emit('login', this.user.handle);
+
+    this.getHandlers();
+    this.socketHandler();
+
+  }
+
+  socketHandler() {
     //get messages.
     this.socket.on('chat', (data) => {
       if ((data.sender == this.user.handle || data.receiver == this.user.handle) && (this.receiver_handle == data.sender || this.receiver_handle == data.receiver)) {
         this.chats.push(data);
-        this.feedbackmsg = '';
+        this.refreshFeedback();
       }
       else if (data.receiver == this.user.handle && this.receiver_handle !== data.sender) {
         this.feedbackmsg2 = 'Received a message from ' + data.sender;
@@ -69,12 +78,25 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       }
     });
 
-    this.activatedRoute.params.subscribe((params: Params) => {
-      this.user.handle = params.handle;
-      this.RouteChanged();
+    //chat deletion call back event.
+    this.socket.on('online', (data) => {
+      this.online_users = data;
+      this.refreshFeedback();
     });
 
-    //getting chat list.
+  }
+
+  refreshFeedback() {
+    if (this.online_users.includes(this.receiver_handle)) {
+      this.feedbackmsg = 'online';
+    }
+    else {
+      this.feedbackmsg = 'offline';
+    }
+  }
+
+  //getting chat list.
+  getHandlers() {
     this.objCommonService.getHandlers().subscribe(res => {
       this.handlers = res;
       let temp_handle = this.user.handle;
@@ -87,21 +109,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.getStoredChats();
       }
     });
-  }
 
-  /**
-   * checking logged in user
-   */
-  RouteChanged() {
-    if (localStorage.getItem('handle') !== this.user.handle) {
-      localStorage.clear();
-      this.router.navigateByUrl('/login');
-    }
-    else {
-      this.user.displayName = localStorage.getItem('displayName') != undefined ? localStorage.getItem('displayName') : this.user.handle;
-    }
   }
-
   /**
    * Gets stored chats
    */
@@ -143,9 +152,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
    * Drop down change event fired
    */
   receiverChanged() {
-    this.feedbackmsg = '';
     this.feedbackmsg2 = '';
     this.getStoredChats();
+    this.refreshFeedback();
   }
 
   /**
@@ -173,6 +182,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
    * user logout
    */
   logout() {
+    this.socket.emit('logout');
     this.router.navigateByUrl('/login');
   }
 

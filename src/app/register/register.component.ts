@@ -48,8 +48,8 @@ export class RegisterComponent implements OnInit {
         console.log(res);
         if (res['_id'] != undefined) {
           localStorage.setItem('handle', res['handle']);
-          let redirec_url = '/chat/' + res['handle'];
-          this.router.navigateByUrl(redirec_url);
+          localStorage.setItem('displayName', res['displayName']);
+          this.router.navigateByUrl('/chat');
         }
         else {
           this.handleErrorMsg = 'Handle not available.';

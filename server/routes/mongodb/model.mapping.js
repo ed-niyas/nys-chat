@@ -4,7 +4,7 @@ var Users = require('../../models/users.model');
 var ModelMapping = {
 
     Mapping: function (model) {
-        switch(model){
+        switch(model.toLowerCase()){
 
             case 'users': return Users;
             // add cases for future models here

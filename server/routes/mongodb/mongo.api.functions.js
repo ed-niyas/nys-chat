@@ -2,20 +2,20 @@ const ModelMapping=require('./model.mapping');
 const appSettings = require('../../../appSettings.config');
 const mongoose = require('mongoose');
 
-if(appSettings.user!=undefined){
-    mongoose.connect(appSettings.MongoDb, {
+if(appSettings.mongodb_username!=undefined){
+    mongoose.connect(appSettings.mongodb, {
         auth: {
-          user: appSettings.user,
-          password: appSettings.password
+          user: appSettings.mongodb_username,
+          password: appSettings.mongodb_password
         }
       })
-      .then(() => console.log('Connected to azure mongodb'))
-      .catch((err) => console.error('MongoDb Connection Error\n'+err));    
+      .then(() => console.log('connected to azure mongodb'))
+      .catch((err) => console.error('mongodb connection error\n'+err));    
 }
 else{
-    mongoose.connect(appSettings.MongoDb)
-      .then(() => console.log('Connected to local mongodb'))
-      .catch((err) => console.error('MongoDb Connection Error\n'+err));    
+    mongoose.connect(appSettings.mongodb)
+      .then(() => console.log('connected to local mongodb'))
+      .catch((err) => console.error('mongodb connection error\n'+err));    
 }
 
 var ApiFunctions = {
@@ -23,7 +23,7 @@ var ApiFunctions = {
     //Gets collection data based on query from mongodb
     GET_CALL: function (req, res, callback) {
         var CollectionName= req.params.CollectionName;
-        var Mapping = ModelMapping.Mapping(CollectionName.toLowerCase());
+        var Mapping = ModelMapping.Mapping(CollectionName);
         var query = Object.assign({},req.query);
         delete query.sortby;
         delete query.orderby;
@@ -77,7 +77,7 @@ var ApiFunctions = {
             });
         }
         else{
-            callback({error: 'Mongo Collection Not Found/Not Mapped'});
+            callback({error: 'mongo collection not found/not mapped'});
         }
       
     },
@@ -85,7 +85,7 @@ var ApiFunctions = {
     //Add new collection data to mongodb
     POST_CALL: function (req, res, callback) {
         var CollectionName= req.params.CollectionName;
-        var Mapping = ModelMapping.Mapping(CollectionName.toLowerCase());
+        var Mapping = ModelMapping.Mapping(CollectionName);
         var MongoObj= req.body;
         var bulkinsert=false;
         if(Object.prototype.toString.call(MongoObj)=="[object Array]"){
@@ -145,21 +145,21 @@ var ApiFunctions = {
            
         }
         else{
-            callback({error: 'Mongo Collection Not Found/Not Mapped'});
+            callback({error: 'mongo collection not found/not mapped'});
         }
     },
 
     //Updates collection data based on query to mongodb
     PUT_CALL: function (req, res, callback) {
         var CollectionName= req.params.CollectionName;
-        var Mapping = ModelMapping.Mapping(CollectionName.toLowerCase());
+        var Mapping = ModelMapping.Mapping(CollectionName);
         var MongoObj= req.body;
 
         if(Mapping==null){
-            callback({error: 'Mongo Collection Not Found/Not Mapped'});
+            callback({error: 'mongo collection not found/not mapped'});
         } 
         else if(Object.keys(req.query).length<1){
-            callback({error: 'Expecting Some query Parameters'});
+            callback({error: 'expecting some query parameters'});
         }
         else{
             Mapping.findOneAndUpdate(req.query, MongoObj, { new: true }, function (err, result) {
@@ -175,13 +175,13 @@ var ApiFunctions = {
     //Delete collection data based on query from mongodb
     DELETE_CALL: function (req, res, callback) {
         var CollectionName= req.params.CollectionName;
-        var Mapping = ModelMapping.Mapping(CollectionName.toLowerCase());
+        var Mapping = ModelMapping.Mapping(CollectionName);
 
         if(Mapping==null){
-            callback({error: 'Mongo Collection Not Found/Not Mapped'});
+            callback({error: 'mongo collection not found/not mapped'});
         } 
         else if(Object.keys(req.query).length<1){
-            callback({error: 'Expecting Some query Parameters'});
+            callback({error: 'expecting some query parameters'});
         }
         else{
             Mapping.remove(req.query, function (err, result) {
