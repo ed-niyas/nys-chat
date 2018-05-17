@@ -10,19 +10,19 @@ Real time chat app with Angular, Node and MongoDb using socket-io
 
 #### appSettings
 
-By default, app is connecting to local mongo db. In order to connect to any cloud mongo make necessary changes.</li>
+By default, app is set to connect to local mongo db. In order to connect to any cloud mongo make necessary changes.</li>
 
 ```javascript
 var config = {};
 
 <!-- cloud mongo start  -->
-<!-- config.MongoDb=''; -->
-<!-- config.user=''; -->
-<!-- config.password=''; -->
+<!-- config.mongodb=''; -->
+<!-- config.mongodb_username=''; -->
+<!-- config.mongodb_password=''; -->
 <!-- cloud mongo end  -->
 
 <!-- local mongo start  -->
-config.MongoDb="mongodb://localhost/nyschat";
+config.mongodb="mongodb://localhost/nyschat";
 <!-- local mongo end  -->
 
 module.exports = config;
@@ -49,6 +49,6 @@ export const environment = {
  <li>Go back to nys-chat and do <i>npm build --prod</i></li>
  <li>Copy all the contents in dist/nys-chat/ to www folder of nys-chat-mobile</li>
  <li>Change <strong> base href="/" </strong> index.html in www to <strong> base href="./" </strong></li>
- <li><i>node server</i></li>
+ <li><i>node server</i> from server system.</li>
  <li>Go to nys-chat-mobile and do <i>cordova run ios<i> or cordova run android</li>
  </ul>
