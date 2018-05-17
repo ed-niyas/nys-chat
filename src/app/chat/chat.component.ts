@@ -138,7 +138,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
    * Sending message to socket io
    */
   sendMessage(): void {
-    if (this.message !== '' && this.receiver_handle !== '') {
+    if (this.message !== '' && this.message !== '\n' && this.receiver_handle !== '') {
       this.socket.emit('chat', {
         message: this.message,
         sender: this.user.handle,
