@@ -61,11 +61,19 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     //typing in feedback
     this.socket.on('typing', (data) => {
       if (data.sender !== this.user.handle && data.receiver == this.user.handle) {
-        if (data.sender == this.receiver_handle) {
-          this.feedbackmsg = data.sender + ' is typing..';
+        if(data.status){
+          if (data.sender == this.receiver_handle) {
+            this.feedbackmsg = data.sender + ' is typing..';
+          }
+          else {
+            this.feedbackmsg2 = data.sender + ' is typing..';
+          }
         }
-        else {
-          this.feedbackmsg2 = data.sender + ' is typing..';
+        else{
+          if (data.sender !== this.receiver_handle) {
+            this.feedbackmsg2='';
+          }
+          this.refreshFeedback();
         }
       }
 
@@ -174,7 +182,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       this.sendMessage();
     }
     else {
-      this.socket.emit('typing', { sender: this.user.handle, receiver: this.receiver_handle });
+      this.socket.emit('typing', { sender: this.user.handle, receiver: this.receiver_handle, status: true });
+      clearTimeout(timeout);
+      var timeout = setTimeout(()=>{
+        this.socket.emit("typing",  { sender: this.user.handle, receiver: this.receiver_handle, status: false });
+      }, 3000);
+
     }
   }
 
