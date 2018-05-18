@@ -1,30 +1,32 @@
 <div id='nys-chat'>
-  <div id="header-box">
-    <span>
-      <i>Welcome {{this.user.displayName}}</i>
-    </span>
-    <span style="padding-left: 10px; font-size: 12px">
-      <i>{{this.feedbackmsg2}}</i>
-    </span>
-    <span style="float: right">
-      <mat-icon [matMenuTriggerFor]="menu" matTooltip='settings'>settings</mat-icon>
-      <mat-menu #menu="matMenu" style="position: relative; left:0; top:0;">
-        <button mat-menu-item (click)='logout()'>Logout</button>
-        <button mat-menu-item (click)='clearChat()'>Delete chat</button>
-      </mat-menu>
-    </span>
-  </div>
-  <div style="margin: 5px 2px 0px 2px;">
-    <mat-form-field style="width: 100%;">
-      <mat-select color="blue" placeholder="Choose a person to chat" [(value)]='receiver_handle'>
-        <mat-option *ngFor="let item of handlers" [value]="item.handle" (click)="receiverChanged()">
-          {{ item.displayName}} - {{ item.handle }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div *ngIf="this.feedbackmsg!==''" id="feeback-box">
-    {{this.feedbackmsg}}
+  <div id='pre-chat-box'>
+    <div id="header-box">
+      <span>
+        <i>Welcome {{this.user.displayName}}</i>
+      </span>
+      <span style="padding-left: 10px; font-size: 12px">
+        <i>{{this.feedbackmsg2}}</i>
+      </span>
+      <span style="float: right">
+        <mat-icon [matMenuTriggerFor]="menu" matTooltip='settings'>settings</mat-icon>
+        <mat-menu #menu="matMenu" style="position: relative; left:0; top:0;">
+          <button mat-menu-item (click)='logout()'>Logout</button>
+          <button mat-menu-item (click)='clearChat()'>Delete chat</button>
+        </mat-menu>
+      </span>
+    </div>
+    <div id='select-box'>
+      <mat-form-field style="width: 100%;">
+        <mat-select color="blue" placeholder="Choose a person to chat" [(value)]='receiver_handle'>
+          <mat-option *ngFor="let item of handlers" [value]="item.handle" (click)="receiverChanged()">
+            {{ item.displayName}} - {{ item.handle }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngIf="this.feedbackmsg!==''" id="feeback-box">
+      {{this.feedbackmsg}}
+    </div>
   </div>
   <div id='chat-window'>
     <div id='output'>
@@ -40,7 +42,7 @@
       </div>
     </div>
   </div>
-  <div style="margin: 10px;">
+  <div id='text-box'>
     <mat-form-field style="width: 100%">
       <textarea matInput placeholder="Message" [(ngModel)]='this.message' (keydown)="keyDownFunction($event)"></textarea>
       <mat-icon matSuffix (click)='sendMessage()' class="cursor" matTooltip='Send'>send</mat-icon>

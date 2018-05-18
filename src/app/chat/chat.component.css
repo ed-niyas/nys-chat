@@ -1,28 +1,58 @@
-#header-box{
-    background: darkblue;
-    padding: 5px;
-    color: white;
-}
 #nys-chat{
-    max-width: 500px;
-    margin: 0px auto;
-    border: 1px solid #ddd;
-    box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
+    position: fixed;
+    top: 0px;
+    min-height: 100vh;
+    /* bottom: 0px; */
+    width: 100%;
+    border: 1px solid darkblue;
     border-radius: 2px;
 }
 
-#chat-window{
-    height: 400px;
-    overflow: auto;
-    background: #f9f9f9;
+#pre-chat-box{
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: 95px;
+}
+
+#header-box{
+    background: darkblue;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    padding-right: 0px;
+    color: white;
+    height: 40px;;
+}
+
+#select-box{
+    position: relative;
+    top:0px;
+    margin: 5px 5px 0px 5px;
+    padding-right: 10px;
+    height: 50px;
+    width: 100%;;
 }
 
 #feeback-box{
-    font-size: 10px;
+    position: relative;
+    top: 0px;    
+    width: 100%;
     background: lightgray;
     font-style: italic;
-    padding-left: 5px;
+    height: 20px;    
+    padding: 1px;
     font-size: 12px;
+}
+
+#chat-window{
+    position: fixed;
+    width: 100%;
+    max-height: 75vh;
+    top: 120px;
+    bottom: 80px;
+    overflow: auto;
+    background: #f9f9f9;
 }
 
 #chat-box-sender{
@@ -50,6 +80,17 @@
     font-size: 10px;
 }
 
+#text-box{
+    margin: 5px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 70px;
+}
 .cursor{
     cursor:pointer
+}
+
+.mat-icon{
+    margin-right:10px;
 }
