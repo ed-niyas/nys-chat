@@ -8,7 +8,7 @@
         <i>{{this.feedbackmsg2}}</i>
       </span>
       <span style="float: right">
-        <mat-icon [matMenuTriggerFor]="menu" matTooltip='settings'>settings</mat-icon>
+        <mat-icon [matMenuTriggerFor]="menu" matTooltip='settings' class="cursor">settings</mat-icon>
         <mat-menu #menu="matMenu" style="position: relative; left:0; top:0;">
           <button mat-menu-item (click)='logout()'>Logout</button>
           <button mat-menu-item (click)='clearChat()'>Delete chat</button>

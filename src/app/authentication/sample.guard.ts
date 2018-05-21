@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+}
+)
 export class SampleGuard implements CanActivate {
 
   constructor(private router: Router) {

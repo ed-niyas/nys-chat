@@ -9,8 +9,6 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ChatComponent } from './chat/chat.component';
 import {RouteConfig} from './app.routing';
-import { CommonService } from './common/common.service';
-import { SampleGuard } from './authentication/sample.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
@@ -30,7 +28,7 @@ import { HttpModule } from '@angular/http';
     MaterialModule,
     RouterModule.forRoot(RouteConfig, { useHash: false })
   ],
-  providers: [CommonService, SampleGuard],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

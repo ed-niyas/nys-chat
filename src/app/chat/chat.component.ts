@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import * as socketIo from 'socket.io-client';
-import { Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from '../classes/user';
 import { CommonService } from '../common/common.service';
 import { environment } from '../../environments/environment';
@@ -15,15 +15,15 @@ import { environment } from '../../environments/environment';
  */
 export class ChatComponent implements OnInit, AfterViewChecked {
 
-  socket;
-  user = new User('', '', '');
-  receiver_handle = '';
-  message = '';
-  chats = [];
-  handlers: any;
-  feedbackmsg = '';
-  feedbackmsg2 = '';
-  online_users = [];
+  socket;/**socket connection */
+  user = new User('', '', '');/**current user */
+  receiver_handle = '';/**handle of current receiver */
+  message = '';/**current text in message box */
+  chats = [];/**chat loaded */
+  handlers: any;/** list of handler available to chat */
+  feedbackmsg = '';/** status(online, offline or typing..) */
+  feedbackmsg2 = '';/**for typing or notification of message from handlers which are not chosen */
+  online_users = [];/**list useres who are online */
 
   constructor(private router: Router, private objCommonService: CommonService) { }
 
@@ -40,6 +40,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   }
 
+  /**All socket-io events are handled here */
   socketHandler() {
     //get messages.
     this.socket.on('chat', (data) => {
@@ -86,7 +87,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       }
     });
 
-    //chat deletion call back event.
+    //receiving current receiver status.
     this.socket.on('online', (data) => {
       this.online_users = data;
       this.refreshFeedback();
@@ -94,6 +95,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   }
 
+  //refreshes current receiver status
   refreshFeedback() {
     if (this.online_users.includes(this.receiver_handle)) {
       this.feedbackmsg = 'online';

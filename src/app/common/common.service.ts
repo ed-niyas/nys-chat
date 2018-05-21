@@ -8,7 +8,6 @@ import {environment} from '../../environments/environment';
 })
 export class CommonService {
 
-  private result: any;
   private headers: HttpHeaders;
   private options: any;
   private apiUrl ='http://'+environment.serverIp+':3000/';

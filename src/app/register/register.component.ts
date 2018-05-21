@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
 
   }
 
+  /**register click event */
   register(): void {
 
     this.displayNameErrorMsg= this.handleErrorMsg = this.passwordErrorMsg ='';

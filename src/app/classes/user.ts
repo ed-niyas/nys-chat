@@ -1,7 +1,7 @@
 export class User {
-    displayName: string;
-    handle: string;
-    password: string;
+    displayName: string;/**display name for user */
+    handle: string;/**unique identifier for user */
+    password: string;/**password for user */
 
     constructor(displayName, handle, password){
         this.displayName=displayName;

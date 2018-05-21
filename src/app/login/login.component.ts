@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
     localStorage.clear();
   }
 
+  /**login click event */
   login() {
     this.objCommonService.getUser(this.user).subscribe(res => {
       var result = res[0];
