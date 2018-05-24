@@ -48,7 +48,7 @@ export const environment = {
  <li><i>cordova add ios</i> or <i>cordova add android</i></li>
  <li>Go back to nys-chat and do <i>npm build --prod</i></li>
  <li>Copy all the contents in dist/nys-chat/ to www folder of nys-chat-mobile</li>
- <li>Change <strong> base href="/" </strong> index.html in www to <strong> base href="./" </strong></li>
+ <li>Change <strong> base href="/" </strong> in index.html in www to <strong> base href="./" </strong></li>
  <li><i>node server</i> from server system.</li>
  <li>Go to nys-chat-mobile and do <i>cordova run ios<i> or cordova run android</li>
  </ul>
