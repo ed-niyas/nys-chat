@@ -50,4 +50,13 @@ export class CommonService {
     return this.http.get(this.apiUrl+'chatfiles/'+sender+receiver+'.txt');
   }
 
+  /**
+   * 
+   * @param handle Updating allowed user devices
+   * @param body 
+   */
+  updateDevices(handle: string, body: any){
+    return this._http.put(this.apiUrl + 'mongodb/users?handle='+handle, body, this.options);
+  }
+
 }

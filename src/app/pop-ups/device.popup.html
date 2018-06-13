@@ -1,0 +1,20 @@
+<div class="pull-right">
+    <h2 mat-dialog-title (click)="onNoClick()">
+        <i class="material-icons cursor" style="font-size: 30px !important;cursor:pointer" matTooltip="Close">close</i>
+    </h2>
+</div>
+<h2 mat-dialog-title>Max. devices exceeded!!!</h2>
+<span><i>Remove atleast one of the devices below</i></span>
+<div class="row" style="margin-top: 10px;">
+    <mat-checkbox class="col-md-12" style="width: 100%" [(ngModel)]="data.remove_ips[0]">{{data.device_ips[0]}}</mat-checkbox>
+</div>
+<div class="row">
+    <mat-checkbox class="col-md-12" style="width: 100%" [(ngModel)]="data.remove_ips[1]">{{data.device_ips[1]}}</mat-checkbox>
+</div>
+<div class="row">
+    <mat-checkbox class="col-md-12" style="width: 100%" [(ngModel)]="data.remove_ips[2]">{{data.device_ips[2]}}</mat-checkbox>
+</div>
+<br />
+<div class="row">
+    <button class="col-md-12" style="width: 100%" mat-raised-button mat-button color="accent" (click)='Remove()'>Remove</button>
+</div>

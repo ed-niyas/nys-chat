@@ -11,7 +11,9 @@ import {
     MatSelectModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatDialogModule,
+    MatCheckboxModule
   } from '@angular/material';
   
   
@@ -28,6 +30,8 @@ import {
         MatSelectModule,
         MatSnackBarModule,
         MatTooltipModule,
+        MatDialogModule,
+        MatCheckboxModule
     ],
     
     exports: [
@@ -40,6 +44,8 @@ import {
         MatSelectModule,
         MatSnackBarModule,
         MatTooltipModule,
+        MatDialogModule,
+        MatCheckboxModule
     ],
  
     providers: [

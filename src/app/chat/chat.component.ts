@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { User } from '../classes/user';
 import { CommonService } from '../common/common.service';
 import { environment } from '../../environments/environment';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { DevicePopup } from '../pop-ups/device.popup';
 
 @Component({
   selector: 'app-chat',
@@ -24,20 +26,23 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   feedbackmsg = '';/** status(online, offline or typing..) */
   feedbackmsg2 = '';/**for typing or notification of message from handlers which are not chosen */
   online_users = [];/**list useres who are online */
-
-  constructor(private router: Router, private objCommonService: CommonService) { }
+  constructor(private router: Router, private objCommonService: CommonService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
 
     this.user.handle = localStorage.getItem('handle');
     this.user.displayName = localStorage.getItem('displayName') != undefined ? localStorage.getItem('displayName') : localStorage.getItem('handle');
-
     this.socket = socketIo('http://' + environment.serverIp + ':3000');
-    this.socket.emit('login', this.user.handle);
 
-    this.getHandlers();
     this.socketHandler();
+    this.getHandlers();    
+    
+    this.socket.emit('prelogin', this.user.handle);
+  }
 
+  /**Emitting event after succesull login */
+  Login() {
+    this.socket.emit('login', this.user.handle);
   }
 
   /**All socket-io events are handled here */
@@ -62,7 +67,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     //typing in feedback
     this.socket.on('typing', (data) => {
       if (data.sender !== this.user.handle && data.receiver == this.user.handle) {
-        if(data.status){
+        if (data.status) {
           if (data.sender == this.receiver_handle) {
             this.feedbackmsg = data.sender + ' is typing..';
           }
@@ -70,9 +75,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
             this.feedbackmsg2 = data.sender + ' is typing..';
           }
         }
-        else{
+        else {
           if (data.sender !== this.receiver_handle) {
-            this.feedbackmsg2='';
+            this.feedbackmsg2 = '';
           }
           this.refreshFeedback();
         }
@@ -93,6 +98,37 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       this.refreshFeedback();
     });
 
+    //logging out remotely.
+    this.socket.on('logmeout', (data) => {
+      // if (this.socket.id !== data.socket && this.user.handle === data.handle) {
+        this.logout();
+      // }
+    });
+
+    //allowing login.
+    this.socket.on('allowlogin', (data) => {
+      this.Login();
+    });
+
+    //logging out remotely.
+    this.socket.on('logdeviceout', (device_data) => {
+        let dialogRef = this.dialog.open(DevicePopup, {
+          width: '400px',
+          height: '275px',
+          data: { device_ips: device_data, remove_ips: [false, false, false] }
+        });
+
+        const sub = dialogRef.componentInstance.onSave.subscribe((data) => {
+          if (data !== null) {
+            this.objCommonService.updateDevices(this.user.handle, { device_ips: data }).subscribe(res => {
+              this.socket.emit('prelogin', this.user.handle);
+            });
+          }
+          else{
+            this.logout();
+          }
+        });
+    });
   }
 
   //refreshes current receiver status
@@ -186,8 +222,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     else {
       this.socket.emit('typing', { sender: this.user.handle, receiver: this.receiver_handle, status: true });
       clearTimeout(timeout);
-      var timeout = setTimeout(()=>{
-        this.socket.emit("typing",  { sender: this.user.handle, receiver: this.receiver_handle, status: false });
+      var timeout = setTimeout(() => {
+        this.socket.emit("typing", { sender: this.user.handle, receiver: this.receiver_handle, status: false });
       }, 3000);
 
     }

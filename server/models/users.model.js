@@ -5,7 +5,8 @@ var Users=new Schema(
     {
         "handle":{type:String,required: true,unique: true},
         "displayName":{type:String,required: true},
-        "password": {type:String,required: true}
+        "password": {type:String,required: true},
+        "device_ips":[String]
     },{versionKey: false }
 
 );

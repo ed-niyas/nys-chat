@@ -177,7 +177,7 @@ var ApiFunctions = {
         }
         else {
 
-            if (CollectionName.toLowerCase() === 'users') {
+            if (CollectionName.toLowerCase() === 'users' && MongoObj.password!=undefined) {
                 MongoObj.password = hashpwd(MongoObj.password);
             }
 
@@ -212,6 +212,20 @@ var ApiFunctions = {
                 }
             });
         }
+    },
+
+    geteDeviceIps: function(handle, callback){
+        var CollectionName = 'users';
+        var Mapping = ModelMapping.Mapping(CollectionName);
+        Mapping.findOne({ 'handle' : handle}, function (err, result) {
+            callback(result);
+        });
+    },
+
+    updateDeviceIps: function(handle, deviceips){
+        var CollectionName = 'users';
+        var Mapping = ModelMapping.Mapping(CollectionName);
+        Mapping.findOneAndUpdate({ 'handle' : handle}, { 'device_ips': deviceips }, { new: true }, function (err, result) {});
     }
 }
 

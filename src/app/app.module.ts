@@ -11,13 +11,15 @@ import { ChatComponent } from './chat/chat.component';
 import {RouteConfig} from './app.routing';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+import { DevicePopup } from './pop-ups/device.popup';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ChatComponent
+    ChatComponent,
+    DevicePopup
   ],
   imports: [
     BrowserModule,
@@ -29,6 +31,7 @@ import { HttpModule } from '@angular/http';
     RouterModule.forRoot(RouteConfig, { useHash: false })
   ],
   providers: [],
+  entryComponents: [DevicePopup],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
